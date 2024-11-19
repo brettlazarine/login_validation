@@ -1,8 +1,12 @@
 # login_validation
-
+### TODO
 - Verifies email format
 - Verifies password complexity
-- Adds new users to a local file/db
-  -  Checks if the user exists before adding to file/db
+- Adds new users to db
+  -  Checks if the user exists before adding to db
 -  All CLI interaction
-- Potentially hookup to SQL Server, or a web-hosted db
+- Ensure full CRUD
+
+### DONE
+- Created SQL Server db
+- Created connection to SQL Server from Linux subsystem
