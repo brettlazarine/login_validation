@@ -1,25 +1,38 @@
 import pyodbc
-import json
+from config.config import load_config
+from database.db import *
 
-def load_connection():
-    with open("appsettings.json", "r") as file:
-        return json.load(file)
+# ADMIN PRIVILEGES FOR SOME LOGINS THAT WOULD ALLOW ACCESS TO DATA ANALYTICS
 
 def main():
-    config = load_connection()
-    conn_string = config["database"]["connectionString"]
     try:
-        conn = pyodbc.connect(conn_string)
-        print("Connection successful")
-
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users")
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
+        # READ USERS ***
+        query = "SELECT * FROM Users"
+        rows = read_users(query)
+        if rows:
+            for row in rows:
+                print(row)
+        else:
+            print("No users found")
         
-        cursor.close()
-        conn.close()
+        # CREATE USER ***
+        # query = "INSERT INTO Users (email, password) VALUES (?, ?);"
+        # params = ('test2@test2.com', 'wxyz6789)')
+        # res = create_user(query, params)
+        # print(res)
+
+        # UPDATE USER ***
+        # query = "UPDATE Users SET email=? WHERE id=?;"
+        # params = ('DeleteMe!', 3)
+        # res = update_user(query, params)
+        # print(res)
+
+        # DELETE USER ***
+        # query = "DELETE FROM Users WHERE id=?;"
+        # params = (3)
+        # res = delete_user(query, params)
+        # print(res)
+
     except pyodbc.Error as e:
         print("Error: ", e)
 
