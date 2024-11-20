@@ -12,7 +12,7 @@ def create_user(query, params=None):
             with conn.cursor() as cursor:
                 cursor.execute(query, params or ())
                 conn.commit()
-        return "User created successfully"
+        return True, "User created successfully"
     except pyodbc.Error as e:
         return f"Error: {e}"
 

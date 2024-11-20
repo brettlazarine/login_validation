@@ -1,41 +1,54 @@
-import pyodbc
-from config.config import load_config
-from database.db import *
-
 # ADMIN PRIVILEGES FOR SOME LOGINS THAT WOULD ALLOW ACCESS TO DATA ANALYTICS
+from login.loginuser import login_user
+from register.registeruser import register_user
+
+def control_flow():
+    print("Enter 1 to Login, 2 to Register, 3 to Exit")
+    choice = input().strip()
+    # USER EXITS
+    if choice == "3":
+        return (True, "Goodbye"), 3
+    # USER REGISTERS
+    elif choice == "2":
+        print("Please enter your email")
+        email = input().strip()
+        print("""
+Please enter a strong password:
+    - Between 8 and 15 characters
+    - At least one uppercase and one lowercase letter
+    - At least one number and one special character
+    - No spaces
+              """)
+        password = input()
+        return register_user(email, password), 2
+    # USER LOGS IN
+    elif choice == "1":
+        print("Please enter your email")
+        email = input().strip()
+        print("Please enter your password")
+        password = input().strip()
+        return login_user(email, password), 1
+    else:
+        return (True, "Invalid choice"), 3
+    
 
 def main():
-    try:
-        # READ USERS ***
-        query = "SELECT * FROM Users"
-        rows = read_users(query)
-        if rows:
-            for row in rows:
-                print(row)
+    print("Welcome")
+    while True:
+        (success, res), exit_code = control_flow()
+        print(res)
+
+        if not success:
+            continue
+
+        if exit_code == 3:
+            break
+        if exit_code == 2:
+            continue
         else:
-            print("No users found")
-        
-        # CREATE USER ***
-        # query = "INSERT INTO Users (email, password) VALUES (?, ?);"
-        # params = ('test2@test2.com', 'wxyz6789)')
-        # res = create_user(query, params)
-        # print(res)
-
-        # UPDATE USER ***
-        # query = "UPDATE Users SET email=? WHERE id=?;"
-        # params = ('DeleteMe!', 3)
-        # res = update_user(query, params)
-        # print(res)
-
-        # DELETE USER ***
-        # query = "DELETE FROM Users WHERE id=?;"
-        # params = (3)
-        # res = delete_user(query, params)
-        # print(res)
-
-    except pyodbc.Error as e:
-        print("Error: ", e)
-
+            print("Press any key to continue")
+            input()
+            break
         
 
 if __name__ == "__main__":

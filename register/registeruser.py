@@ -5,9 +5,9 @@ from passwordvalidation.passwordvalidation import password_is_valid
 def register_user(email, password):
     if not email_is_valid(email):
         return "Email is not valid"
-    pw_res = password_is_valid(password)
-    if not pw_res[0]:
-        return pw_res[1]
+    pw_is_valid, pw_message = password_is_valid(password)
+    if not pw_is_valid:
+        return pw_message
     
     user_emails = read_users("SELECT email FROM Users WHERE email = ?", email)
     if user_emails:
